@@ -1,5 +1,6 @@
 package com.projetoestudo.coursespring.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projetoestudo.coursespring.entities.pk.OrderItemPK;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -10,7 +11,7 @@ import jakarta.persistence.Table;
 public class OrderItem {
 
     @EmbeddedId
-    private OrderItemPK id;
+    private OrderItemPK id = new OrderItemPK();
 
     private Integer quantity;
 
@@ -26,6 +27,7 @@ public class OrderItem {
         this.price = price;
     }
 
+    @JsonIgnore
     public Order getOrder()
     {
         return id.getOrder();
