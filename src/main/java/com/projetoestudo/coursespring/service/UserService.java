@@ -4,6 +4,7 @@ import com.projetoestudo.coursespring.entities.User;
 import com.projetoestudo.coursespring.repositories.UserRepository;
 import com.projetoestudo.coursespring.service.exceptions.DatabaseException;
 import com.projetoestudo.coursespring.service.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -44,9 +45,16 @@ public class UserService {
     }
 
     public User update(Long id, User obj){
-        User entity = userRepository.getReferenceById(id);
-        updataData(entity, obj);
-        return userRepository.save(entity);
+
+        try {
+            User entity = userRepository.getReferenceById(id);
+            updataData(entity, obj);
+            return userRepository.save(entity);
+        }
+        catch (EntityNotFoundException e)
+        {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updataData(User entity, User obj) {
